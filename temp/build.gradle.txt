@@ -1,0 +1,55 @@
+
+buildscript {
+    ext {
+        spockVersion = '0.7-groovy-2.0'
+    }
+
+    repositories {
+        maven { url "http://repo.spring.io/libs-release" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'blueberry'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://repo.spring.io/libs-release" }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-security"
+
+
+    compile "org.grails:gorm-hibernate4-spring-boot:1.1.0.RELEASE"
+    compile "org.springframework:spring-orm"   // Coz GORM brings in 3.x ORM, JDBC by default
+
+
+    compile "org.apache.commons:commons-lang3:3.3.2"
+    compile "commons-validator:commons-validator:1.4.0" // May be used by GORM. I don't know
+
+    runtime "com.h2database:h2"
+    // runtime("mysql:mysql-connector-java:5.1.29")
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-core:${spockVersion}"
+    testCompile "org.spockframework:spock-spring:${spockVersion}"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}

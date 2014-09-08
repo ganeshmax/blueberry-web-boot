@@ -1,0 +1,20 @@
+spring:
+  jpa:
+#    show_sql: true
+    generate_ddl: true
+    hibernate:
+      ddl_auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/blueberry
+    driverClassName: com.mysql.jdbc.Driver
+    username: bb_dev
+    password: bb_dev_pwd
+
+logging:
+  level:
+    com.blueberry: DEBUG
+    org.hibernate.SQL: DEBUG                                # Equivalent of show_sql
+    org.hibernate.type: TRACE                               # Shows parameter values bound to SQL
+
+server:
+  port: 8080
