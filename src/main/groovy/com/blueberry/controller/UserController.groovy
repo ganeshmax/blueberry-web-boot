@@ -9,6 +9,7 @@ import com.blueberry.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,11 +36,13 @@ public class UserController {
     UserService userService
 
     @RequestMapping(value="", method = GET)
+    @PreAuthorize("hasRole('ROLE_USER')")
     List<User> index() {
         return userService.findAll()
     }
 
     @RequestMapping(value="/{id}", method = GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<? extends Dto> show(@PathVariable Long id) {
         User user = userService.findUserById(id)
 

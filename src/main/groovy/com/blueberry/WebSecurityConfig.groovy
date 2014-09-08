@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity
 
 /**
- * TODO: Document Me
+ * Configure spring security for REST and WEB applications
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14
@@ -31,40 +31,47 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
         auth.userDetailsService(userService)
     }
 
-
+    /**
+     * Use this for rest application
+     */
     @Configuration
     @Order(1)
     public static class RestWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+            // Protect using a catch-all authenticated() strategy here. Use fine-grained authenticated in Controllers.
+            // List out unprotected resources as well here
             http
-                    .antMatcher("/api/**")
-                    .authorizeRequests()
-                        .antMatchers("/api/greeting/**")            .permitAll()
-                        .antMatchers("/api/users")                 .permitAll()
-                        .antMatchers("/api/login", "/api/logout")   .permitAll()
-                        .anyRequest()                               .authenticated()
+                .antMatcher("/api/**")
+                .authorizeRequests()
+                    .antMatchers("/api/sample").permitAll()
+                    .antMatchers("/api/login", "/api/logout").permitAll()
+                    .anyRequest().authenticated()
 
+            // Configure REST friendly entry-point and access denied handler
             http
-                    .exceptionHandling()
-                    .authenticationEntryPoint(restAuthenticationEntryPoint())
-                    .accessDeniedHandler(restAccessDeniedHandler())
+                .exceptionHandling()
+                .authenticationEntryPoint(restAuthenticationEntryPoint())
+                .accessDeniedHandler(restAccessDeniedHandler())
 
+            // Configure REST friendly authenticate success and failure handler
             http
-                    .formLogin()
-                    .loginProcessingUrl("/api/login")
-                    .successHandler(restAuthenticationSuccessHandler())
-                    .failureHandler(restAuthenticationFailureHandler())
-                    .permitAll()
+                .formLogin()
+                .loginProcessingUrl("/api/login")
+                .successHandler(restAuthenticationSuccessHandler())
+                .failureHandler(restAuthenticationFailureHandler())
+                .permitAll()
 
+            // Configure REST friendly logout success handler
             http
-                    .logout()
-                    .logoutUrl("/api/logout")
-                    .logoutSuccessHandler(restLogoutSuccessHandler())
-                    .permitAll()
+                .logout()
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(restLogoutSuccessHandler())
+                .permitAll()
 
+            // Java config enabled CSRF protection by default. Disable it here.
             http
-                    .csrf().disable()                                       // Enabled by default in java config
+                .csrf().disable()
         }
 
         public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
@@ -90,18 +97,22 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
         }
     }
 
+    /**
+     * Use this for web application
+     */
     @Configuration
     @Order(2)
     public static class MvcWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+            // For anything other than /api/** consider the resource protected.
             http
-                    .antMatcher("/**")
-                    .authorizeRequests()
-                        .anyRequest().permitAll()
-                    .and()
-                        .formLogin();
+                .antMatcher("/**")
+                .authorizeRequests()
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin();
         }
     }
 

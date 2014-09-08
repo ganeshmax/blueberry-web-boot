@@ -12,10 +12,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
  * @since 9/6/14
  */
 @RestController
-@RequestMapping("/api/greeting")
-public class GreetingController {
+@RequestMapping("/api/sample")
+public class SampleController {
 
-    @RequestMapping(value="/greet", method = GET)
+    @RequestMapping(value="", method = GET)
     String greet() {
         return "Hello world!"
     }

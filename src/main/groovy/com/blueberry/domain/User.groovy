@@ -3,7 +3,7 @@ package com.blueberry.domain
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User extends DbEntity {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -15,8 +15,11 @@ public class User extends DbEntity {
     @Column(name = "phone", nullable = true)
     String phone;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public void addRole(Role role) {
         if(this.roles == null) {
@@ -24,7 +27,7 @@ public class User extends DbEntity {
         }
 
         this.roles.add(role);
-        role.setUser(this);
+        role.addUser(this);
     }
 
 }
