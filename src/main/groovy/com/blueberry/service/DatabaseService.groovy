@@ -1,7 +1,7 @@
 package com.blueberry.service
 
-import com.blueberry.domain.Role
-import com.blueberry.domain.User
+import com.blueberry.model.domain.Role
+import com.blueberry.model.domain.User
 import com.blueberry.repository.RoleRepository
 import com.blueberry.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 /**
- * TODO: Document Me
+ * Common database services. Eg. Initialization
  *
  * @author Ganeshji Marwaha
  * @since 9/8/14
@@ -33,19 +33,19 @@ class DatabaseService {
         Role userRole = roleRepository.saveAndFlush(new Role(name: 'ROLE_USER'))
 
         userRepository
-                .saveAndFlush(new User(email: 'admin1@email.com', password: 'password'))
+                .saveAndFlush(new User(email: 'admin1@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(adminRole)
 
         userRepository
-                .saveAndFlush(new User(email: 'user1@email.com', password: 'password'))
+                .saveAndFlush(new User(email: 'user1@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(userRole)
 
         userRepository
-                .saveAndFlush(new User(email: 'admin2@email.com', password: 'password'))
+                .saveAndFlush(new User(email: 'admin2@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(adminRole)
 
         userRepository
-                .saveAndFlush(new User(email: 'user2@email.com', password: 'password'))
+                .saveAndFlush(new User(email: 'user2@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(userRole)
     }
 }

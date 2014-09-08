@@ -1,4 +1,4 @@
-package com.blueberry.controller
+package com.blueberry.web.controller
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 /**
- * TODO: Document Me
+ * Sample controller for testing
  *
  * @author Ganeshji Marwaha
  * @since 9/6/14

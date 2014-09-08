@@ -1,6 +1,9 @@
-package com.blueberry.domain
+package com.blueberry.model.domain
+
+import com.blueberry.framework.domain.DbEntity
 
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "user")
@@ -12,7 +15,8 @@ public class User extends DbEntity {
     @Column(name = "pwd", nullable = false)
     String password;
 
-    @Column(name = "phone", nullable = true)
+    @Column(name = "phone", nullable = false)
+    @NotNull
     String phone;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

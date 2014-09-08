@@ -1,5 +1,6 @@
-package com.blueberry.domain;
+package com.blueberry.framework.domain;
 
+import com.blueberry.framework.dto.Dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  */
 
 @MappedSuperclass
-public class DbEntity extends Dto {
+public class DbEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,9 +1,5 @@
 package com.blueberry
 
-import com.blueberry.domain.Role
-import com.blueberry.domain.User
-import com.blueberry.repository.RoleRepository
-import com.blueberry.repository.UserRepository
 import com.blueberry.service.DatabaseService
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext

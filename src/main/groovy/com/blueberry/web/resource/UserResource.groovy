@@ -1,9 +1,9 @@
-package com.blueberry.controller
+package com.blueberry.web.resource
 
-import com.blueberry.domain.Dto
-import com.blueberry.domain.Role
-import com.blueberry.domain.RoleType
-import com.blueberry.domain.User
+import com.blueberry.framework.dto.Dto
+import com.blueberry.model.domain.Role
+import com.blueberry.model.dto.RoleType
+import com.blueberry.model.domain.User
 
 import com.blueberry.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,26 +30,26 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserResource {
 
     @Autowired
     UserService userService
 
     @RequestMapping(value="", method = GET)
     @PreAuthorize("hasRole('ROLE_USER')")
-    List<User> index() {
-        return userService.findAll()
+    ResponseEntity<? extends Dto> index() {
+        return Dto.forEntities(userService.findAll())
     }
 
     @RequestMapping(value="/{id}", method = GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     ResponseEntity<? extends Dto> show(@PathVariable Long id) {
         User user = userService.findUserById(id)
 
         if(user == null) {
-            return new ResponseEntity<User>(NOT_FOUND)
+            return Dto.forStatus(NOT_FOUND)
         } else {
-            return new ResponseEntity<User>(user, OK)
+            return Dto.forEntity(user)
         }
     }
 
@@ -57,29 +57,28 @@ public class UserController {
     ResponseEntity<? extends Dto> save(@RequestBody @Valid User user, BindingResult result) {
 
         if(result.hasErrors()) {
-            return new ResponseEntity<Dto>(new Dto(errors: result.getAllErrors()), UNPROCESSABLE_ENTITY);
+            Dto.forErrors(result.getAllErrors())
         } else {
             user.addRole(new Role(name: RoleType.ROLE_USER.name()))
-            userService.create(user);
+            userService.create(user)
 
-            return new ResponseEntity<User>(user, CREATED)
+            return Dto.forEntity(user, CREATED)
         }
     }
 
     @RequestMapping(value="/{id}", method = PUT)
     ResponseEntity<? extends Dto> update(@PathVariable Long id, @RequestBody @Valid User changedUser, BindingResult result) {
-        User currentUser = userService.findUserById(id);
+        User currentUser = userService.findUserById(id)
 
         if(currentUser == null) {
-            return new ResponseEntity<User>(NOT_FOUND)
+            return Dto.forStatus(NOT_FOUND)
         } else {
             if(result.hasErrors()) {
-                return new ResponseEntity<Dto>(new Dto(errors: result.getAllErrors()), UNPROCESSABLE_ENTITY)
+                return Dto.forErrors(result.getAllErrors())
             } else {
-
                 // TODO: Revisit how to handle this
                 User changedSavedUser = userService.update(changedUser)
-                return new ResponseEntity<User>(changedSavedUser, OK)
+                return Dto.forEntity(changedSavedUser)
             }
         }
     }
@@ -88,9 +87,9 @@ public class UserController {
     ResponseEntity<? extends Dto> delete(@PathVariable Long id) {
         try {
             userService.deleteUser(id)
-            return new ResponseEntity<User>(NO_CONTENT)
+            return Dto.forStatus(NO_CONTENT)
         } catch (EmptyResultDataAccessException e) {
-            return new ResponseEntity<User>(NOT_FOUND)
+            return Dto.forStatus(NOT_FOUND)
         }
     }
 }

@@ -6,13 +6,14 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 /**
- * TODO: Document Me
+ * Configure Web MVC related items.
+ * This is found because of ComponentScan in ApplicationConfig.
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14
  */
 @Configuration
-@EnableWebMvc
+@EnableWebMvc   // Optional: Spring boot would have handled it anyways
 class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override

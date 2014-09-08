@@ -1,11 +1,11 @@
 package com.blueberry.repository
 
-import com.blueberry.domain.User
+import com.blueberry.model.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 /**
- * TODO: Document Me
+ * Respository for User
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14

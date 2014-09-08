@@ -1,10 +1,10 @@
 package com.blueberry.repository
 
-import com.blueberry.domain.Role
+import com.blueberry.model.domain.Role
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
- * TODO: Document Me
+ * Repository for Role
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14

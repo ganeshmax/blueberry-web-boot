@@ -3,9 +3,10 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/groovy/com/blueberry/ApplicationConfiguration.groovy</file>
-          <file>file://$MODULE_DIR$/src/main/groovy/com/blueberry/MvcConfiguration.groovy</file>
+        <fileset id="fileset2" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/groovy/com/blueberry/ApplicationConfig.groovy</file>
+          <file>file://$MODULE_DIR$/src/main/groovy/com/blueberry/WebMvcConfig.groovy</file>
+          <file>file://$MODULE_DIR$/src/main/groovy/com/blueberry/WebSecurityConfig.groovy</file>
         </fileset>
       </configuration>
     </facet>

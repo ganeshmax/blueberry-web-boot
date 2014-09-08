@@ -1,12 +1,11 @@
-package com.blueberry.domain
+package com.blueberry.model.domain
 
+import com.blueberry.framework.domain.DbEntity
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.JoinColumn
 import javax.persistence.ManyToMany
-import javax.persistence.ManyToOne
 
 @Entity
 public class Role extends DbEntity {

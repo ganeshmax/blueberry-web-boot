@@ -5,7 +5,7 @@ import groovy.json.JsonBuilder
 import javax.servlet.http.HttpServletResponse
 
 /**
- * TODO: Document Me
+ * HTTP related utilities
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 
 /**
  * Configure spring security for REST and WEB applications
+ * Found by the app because of ComponentScan on ApplicationConfig.
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14

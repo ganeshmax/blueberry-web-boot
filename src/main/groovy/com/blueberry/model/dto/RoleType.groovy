@@ -1,7 +1,8 @@
-package com.blueberry.domain
+package com.blueberry.model.dto
 
 /**
- * TODO: Document Me
+ * An enum for different types of roles supported in the system.
+ * This has to be kept in sync with the roles in the database
  *
  * @author Ganeshji Marwaha
  * @since 8/24/14

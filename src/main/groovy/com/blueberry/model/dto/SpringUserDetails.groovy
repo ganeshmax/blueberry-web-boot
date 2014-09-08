@@ -1,5 +1,8 @@
-package com.blueberry.domain
+package com.blueberry.model.dto
 
+import com.blueberry.framework.dto.Dto
+import com.blueberry.model.domain.Role
+import com.blueberry.model.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

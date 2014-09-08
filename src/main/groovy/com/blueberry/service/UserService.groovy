@@ -1,7 +1,7 @@
 package com.blueberry.service
 
-import com.blueberry.domain.SpringUserDetails
-import com.blueberry.domain.User
+import com.blueberry.model.dto.SpringUserDetails
+import com.blueberry.model.domain.User
 import com.blueberry.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 /**
- * TODO: Document Me
+ * Services for User and related domain objects.
+ * This also implements UserDetailsService required by spring-security. This, in combination with SpringUserDetails
+ * adapts our application model to the model spring expects.
  *
  * @author Ganeshji Marwaha
  * @since 9/7/14
