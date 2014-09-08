@@ -1,7 +1,10 @@
 package com.blueberry.service
 
+import com.blueberry.model.domain.Role
+import com.blueberry.model.dto.RoleType
 import com.blueberry.model.dto.SpringUserDetails
 import com.blueberry.model.domain.User
+import com.blueberry.repository.RoleRepository
 import com.blueberry.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
@@ -26,6 +29,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository
 
+    @Autowired
+    RoleRepository roleRepository
+
     public User login(String email, String password) {
         userRepository.findByEmailAndPassword(email,password)
     }
@@ -34,7 +40,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User create(User user) {
+    public User create(User user, RoleType roleType) {
+        Role role = roleRepository.findByName(roleType.name())
+        user.addRole(role)
         return userRepository.save(user);
     }
 

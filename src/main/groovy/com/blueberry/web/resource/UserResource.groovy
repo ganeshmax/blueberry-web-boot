@@ -55,8 +55,8 @@ public class UserResource {
             return Dto.forErrors(result.getAllErrors())
         }
 
-        user.addRole(new Role(name: RoleType.ROLE_USER.name()))
-        userService.create(user)
+        // Add any user with a default role of ROLE_USER
+        userService.create(user, RoleType.ROLE_USER)
 
         return Dto.forEntity(user, CREATED)
     }
