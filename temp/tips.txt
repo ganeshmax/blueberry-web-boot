@@ -1,0 +1,2 @@
+
+Add data.sql and schema.sql under resources (classpath). Spring will automagically execute them during startup

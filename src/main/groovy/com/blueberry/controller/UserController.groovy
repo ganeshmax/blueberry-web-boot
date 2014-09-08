@@ -65,7 +65,7 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method = PUT)
     ResponseEntity<? extends Dto> update(@PathVariable Long id, @RequestBody @Valid User changedUser, BindingResult result) {
-        User currentUser = User.get(id)
+        User currentUser = userService.findUserById(id);
 
         if(currentUser == null) {
             return new ResponseEntity<User>(NOT_FOUND)
