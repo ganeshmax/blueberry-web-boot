@@ -29,6 +29,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
  */
 
 @RestController
+@PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/api/users")
 public class UserResource {
 
@@ -36,55 +37,52 @@ public class UserResource {
     UserService userService
 
     @RequestMapping(value="", method = GET)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    ResponseEntity<? extends Dto> index() {
+    ResponseEntity<Dto> index() {
         return Dto.forEntities(userService.findAll())
     }
 
     @RequestMapping(value="/{id}", method = GET)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    ResponseEntity<? extends Dto> show(@PathVariable Long id) {
+    ResponseEntity<Dto> show(@PathVariable Long id) {
         User user = userService.findUserById(id)
-
-        if(user == null) {
-            return Dto.forStatus(NOT_FOUND)
-        } else {
-            return Dto.forEntity(user)
-        }
+        return user ? Dto.forEntity(user) : Dto.forStatus(NOT_FOUND)
     }
 
     @RequestMapping(value="", method = POST)
-    ResponseEntity<? extends Dto> save(@RequestBody @Valid User user, BindingResult result) {
+    ResponseEntity<Dto> save(@RequestBody @Valid User user,
+                             BindingResult result) {
 
         if(result.hasErrors()) {
-            Dto.forErrors(result.getAllErrors())
-        } else {
-            user.addRole(new Role(name: RoleType.ROLE_USER.name()))
-            userService.create(user)
-
-            return Dto.forEntity(user, CREATED)
+            return Dto.forErrors(result.getAllErrors())
         }
+
+        user.addRole(new Role(name: RoleType.ROLE_USER.name()))
+        userService.create(user)
+
+        return Dto.forEntity(user, CREATED)
     }
 
     @RequestMapping(value="/{id}", method = PUT)
-    ResponseEntity<? extends Dto> update(@PathVariable Long id, @RequestBody @Valid User changedUser, BindingResult result) {
-        User currentUser = userService.findUserById(id)
+    ResponseEntity<Dto> update(@PathVariable Long id,
+                               @RequestBody @Valid User changedUser,
+                               BindingResult result) {
 
+        if(result.hasErrors()) {
+            return Dto.forErrors(result.getAllErrors())
+        }
+
+        User currentUser = userService.findUserById(id)
         if(currentUser == null) {
             return Dto.forStatus(NOT_FOUND)
-        } else {
-            if(result.hasErrors()) {
-                return Dto.forErrors(result.getAllErrors())
-            } else {
-                // TODO: Revisit how to handle this
-                User changedSavedUser = userService.update(changedUser)
-                return Dto.forEntity(changedSavedUser)
-            }
         }
+
+        // TODO: Revisit how to handle this
+        User changedSavedUser = userService.update(changedUser)
+        return Dto.forEntity(changedSavedUser)
     }
 
     @RequestMapping(value="/{id}", method = DELETE)
-    ResponseEntity<? extends Dto> delete(@PathVariable Long id) {
+    ResponseEntity<Dto> delete(@PathVariable Long id) {
+
         try {
             userService.deleteUser(id)
             return Dto.forStatus(NO_CONTENT)

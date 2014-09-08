@@ -2,6 +2,8 @@ package com.blueberry.framework.dto
 
 import com.blueberry.framework.domain.DbEntity
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.ObjectError
@@ -19,7 +21,9 @@ import static org.springframework.http.HttpStatus.*
 public class Dto implements Serializable {
 
     List<ObjectError> errors
+
     DbEntity entity
+
     List<? extends DbEntity> entities
 
     public static ResponseEntity<Dto> forEntity(DbEntity entity) {

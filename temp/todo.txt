@@ -5,5 +5,6 @@ Setup spring security oauth 2 and point it to /api/**. Setup only password crede
 Setup liquibase or equivalent database migration tool and automate as much as possible
 Setup validation both with @Valid and any other proper option. Learn it first
 Customize object mapper for Jackson
+Learn and complete integration testing
 
 DONE:

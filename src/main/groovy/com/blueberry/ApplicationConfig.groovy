@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
  * @author Ganeshji Marwaha
  * @since 9/7/14
  */
-@Configuration
-@EnableAutoConfiguration
+@Configuration                                          // Spring Java Config class
+@EnableAutoConfiguration                                // Spring boot specific. Automagically enables required config
+@ComponentScan                                          // Scans all packages starting from current package as root
+
 @EnableTransactionManagement(proxyTargetClass = true)   // Required if you want to use Services without interfaces
-@ComponentScan
-@EnableJpaRepositories  // Optional: Spring boot would have added this
+@EnableJpaRepositories                                  // Optional: Spring boot would have added this
 class ApplicationConfig {
 }
