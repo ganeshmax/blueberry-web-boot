@@ -30,7 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
-@RequestMapping("/api/users")
+@RequestMapping("/rest/users")
 public class UserResource {
 
     @Autowired

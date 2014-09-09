@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+
+    <http pattern="/oauth/token" create-session="stateless"
+          authentication-manager-ref="authenticationManager"
+          xmlns="http://www.springframework.org/schema/security">
+        <intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY"/>
+        <anonymous enabled="false"/>
+        <http-basic entry-point-ref="clientAuthenticationEntryPoint"/>
+        <!--<custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER"/>-->
+        <access-denied-handler ref="oauthAccessDeniedHandler"/>
+    </http>
+
+    <!--<bean id="clientCredentialsTokenEndpointFilter"-->
+          <!--class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">-->
+        <!--<property name="authenticationManager" ref="authenticationManager"/>-->
+    <!--</bean>-->
+
+    <authentication-manager alias="authenticationManager"
+                            xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider user-service-ref="clientDetailsUserService"/>
+    </authentication-manager>
+
+    <bean id="clientDetailsUserService"
+          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <constructor-arg ref="clientDetails"/>
+    </bean>
+
+    <bean id="clientDetails" class="com.nessnity.api.security.OAuthClienDetailsService">
+        <property name="id" value="testuser"/>
+        <property name="secretKey" value="secret" />
+    </bean>
+
+    <bean id="clientAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="springsec/client"/>
+        <property name="typeName" value="Basic"/>
+    </bean>
+
+    <bean id="oauthAccessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+
+    <oauth:authorization-server
+            client-details-service-ref="clientDetails"
+            token-services-ref="tokenServices">
+        <oauth:authorization-code/>
+        <oauth:implicit/>
+        <oauth:refresh-token/>
+        <oauth:client-credentials/>
+        <oauth:password authentication-manager-ref="userAuthenticationManager"/>
+    </oauth:authorization-server>
+
+    <authentication-manager id="userAuthenticationManager"
+                            xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider ref="customUserAuthenticationProvider">
+        </authentication-provider>
+    </authentication-manager>
+
+    <bean id="customUserAuthenticationProvider"
+          class="com.nessnity.api.security.OAuthUserAuthenticationProvider">
+    </bean>
+
+    <bean id="tokenServices"
+          class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="supportRefreshToken" value="true"/>
+        <property name="accessTokenValiditySeconds" value="900000000"/>
+        <property name="clientDetailsService" ref="clientDetails"/>
+    </bean>
+
+    <bean id="tokenStore"
+          class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore"/>
+
+    <bean id="oauthAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+    </bean>
+
+    <http pattern="/resources/**" create-session="never"
+          entry-point-ref="oauthAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
+        <anonymous enabled="false"/>
+        <intercept-url pattern="/resources/**" method="GET"/>
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>
+        <access-denied-handler ref="oauthAccessDeniedHandler"/>
+    </http>
+
+    <oauth:resource-server id="resourceServerFilter"
+                           resource-id="springsec" token-services-ref="tokenServices"/>
+
+</beans>

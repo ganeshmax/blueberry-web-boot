@@ -3,14 +3,28 @@ package com.blueberry
 import com.blueberry.framework.security.*
 
 import com.blueberry.service.UserService
+import com.blueberry.util.Constants
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint
+
+import static com.blueberry.util.Constants.*
 
 /**
  * Configure spring security for REST and WEB applications
@@ -33,20 +47,33 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
     }
 
     /**
+     * Exposing this bean because we are using it to be autowired into OauthBasedRestSecurityAuthorizationServerConfig
+     * This way, the same AuthenticationManager is used for web security, rest security and api security
+     *
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    /**
      * Use this for rest application
      */
     @Configuration
     @Order(1)
-    public static class RestWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
+    public static class CookieBasedRestSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // Protect using a catch-all authenticated() strategy here. Use fine-grained authenticated in Controllers.
             // List out unprotected resources as well here
             http
-                .antMatcher("/api/**")
+                .antMatcher("/rest/**")
                 .authorizeRequests()
-                    .antMatchers("/api/sample").permitAll()
-                    .antMatchers("/api/login", "/api/logout").permitAll()
+                    .antMatchers("/rest/sample").permitAll()
+                    .antMatchers("/rest/login", "/rest/logout").permitAll()
                     .anyRequest().authenticated()
 
             // Configure REST friendly entry-point and access denied handler
@@ -58,7 +85,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
             // Configure REST friendly authenticate success and failure handler
             http
                 .formLogin()
-                .loginProcessingUrl("/api/login")
+                .loginProcessingUrl("/rest/login")
                 .successHandler(restAuthenticationSuccessHandler())
                 .failureHandler(restAuthenticationFailureHandler())
                 .permitAll()
@@ -66,7 +93,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
             // Configure REST friendly logout success handler
             http
                 .logout()
-                .logoutUrl("/api/logout")
+                .logoutUrl("/rest/logout")
                 .logoutSuccessHandler(restLogoutSuccessHandler())
                 .permitAll()
 
@@ -99,22 +126,165 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
     }
 
     /**
-     * Use this for web application
+     * Configures the resource server. Read authorization server first.
+     *
+     * Here, we try to protect the resource server using oauth. So, the first thing we do is configure it to be
+     * protected for specific url patterns (like /api/**). But what happens if the client accesses the url without
+     * an access_token. Since an oauthAuthenticationEntryPoint is specified, spring sends back a 401 instead of
+     * redirecting the user back to the login page.
+     *
+     * This should tell the client that they are not authorized to access the resource. This means that the client
+     * can first go to the authorization server and try to authenticate (get an access token) before coming back and
+     * trying to access the resource.
+     *
+     * The client may do this by redirecting the user to the authorize or token urls depending on whether the client is
+     * trusted or not.
+     *
+     * A trusted client will ask the user for username and password and send tha to /oauth/token flow.
+     * An untrusted client will not have permission to perform the above "password" flow. So, they will redirect the
+     * user to the /oauth/authrorize flow where the oauth dance begins and finally results in an access token.
+     *
+     * Regardless of the path taken by the client, the result is an access_token. Then the client can use this
+     * access_token to access the resource here.
+     *
+     * Note: Basically, this will allow only requests with valid access_token. Otherwise it will send a 401. The client
+     * has to go to the auth server to deal with login and get the access_token. Client cannot do those things here.
+     *
+     * TODO: Configure other items like the entryPoint. There could be other items that lead to a form-login scenario
+     * instead of a proper oauth scenario
+     *
      */
     @Configuration
     @Order(2)
-    public static class MvcWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+    @EnableResourceServer
+    public static class OauthBasedRestSecurityResourceServerConfig extends ResourceServerConfigurerAdapter {
+
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+            resources.resourceId(APPLICATION_NAME)
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            http
+                .antMatcher("/api/**")
+                .authorizeRequests()
+                    .anyRequest().access("#oauth2.hasScope('read') or #oauth2.hasScope('write') or #oauth2.hasScope('trust')");
+
+            http.exceptionHandling()
+                .authenticationEntryPoint(new OAuth2AuthenticationEntryPoint())
+        }
+    }
+
+    /**
+     * Configures the authorization server.
+     *
+     * At present only "password" flow is enabled. BTW, it is enabled automatically when we configure an authentication
+     * manager.
+     *
+     * /oauth/authorize: Neither protected nor handled by spring
+     * -----------------------------------------------------------------------------------------------------------------
+     * In general, an oauth flow starts with an /oauth/authorize request. This request is supposed to be protected by
+     * the app's web form-login authentication. spring doesn't configure anything for this URL by default. So, the
+     * web will use its form-login and its authenticationManager to authenticate the user before allowing access to
+     * this request. Once the user logs-in, they will be shown the authorize page where the user clicks on
+     * an "authorize" button. I think this page has to be provided by us. Spring security doesn't do much here.
+     * This results in a request to /oauth/confirm_access URL.
+     *
+     * /oauth/confirm_access: Not protected by spring, but handled by spring
+     * -----------------------------------------------------------------------------------------------------------------
+     * Again, this url is protected by the app's web form-login authentication. This url will be handled by spring
+     * and spring will redirect the user to the client with auth-code.
+     *
+     * /oauth/token: Protected by spring for auth_code and client_id. No client creds required as long as auth_code
+     * -----------------------------------------------------------------------------------------------------------------
+     * The client will then initiate a call to this url with the auth_code. spring will handle this and return the
+     * access_token. TODO: get into the details of this here
+     *
+     * /oauth/token - password: Protected by spring for client creds and user creds
+     * -----------------------------------------------------------------------------------------------------------------
+     * For the password flow, the authorize, confirm_access etc. is not needed. Only a direct request to this URL is
+     * required. But, the client will send 2 sets of credentials.
+     * 1. client credentials in Basic auth header
+     * 2. user credentials in form body
+     *
+     * Spring will configure the filters required for this, but it needs 2 authentication managers to manage this. In
+     * general, the clients are setup in-memory. So, by providing an inMemory() clientDetailsService, we implicitly
+     * give spring an authentication manager to deal with #1. Next, since the user credentials need the same
+     * authentication mechanism used by web, because the user is the same, we can provide an instance of regular web
+     * authentication manager to deal with #2.
+     *
+     * Once we give that, spring will authenticate the client first, the user next and offer the access token back. Now,
+     * the client can use the access token to request the resource server.
+     *
+     * Note: If the client was thrown a 401 with resource server, the client should come here and follow either the
+     * auth-code or implicit or password (only this is supported) flow here to get the access_token. Then they can go
+     * back to the resource server to get access to resources.
+     *
+     * This discussion is continued in the @EnableResourceServer
+     *
+     */
+    @Configuration
+    @Order(3)
+    @EnableAuthorizationServer
+    public static class OauthBasedRestSecurityAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+        @Autowired
+        AuthenticationManager authenticationManager
+
+        @Override
+        public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        }
+
+        /**
+         * This configures the
+         * @param clients
+         * @throws Exception
+         */
+        @Override
+        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+            clients
+                    .inMemory()
+                        .withClient("blueberry-android")
+                            .secret("blueberry-android-password")
+                            .resourceIds(APPLICATION_NAME)
+                            .authorizedGrantTypes("password")
+                            .scopes("read", "write", "trust")
+                            .authorities("ROLE_TRUSTED_CLIENT")
+                    .and()
+                        .withClient("blueberry-ios")
+                            .secret("blueberry-ios-password")
+                            .resourceIds(APPLICATION_NAME)
+                            .authorizedGrantTypes("password")
+                            .scopes("read", "write", "trust")
+                            .authorities("ROLE_TRUSTED_CLIENT")
+        }
+
+        @Override
+        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            endpoints
+                    .authenticationManager(authenticationManager)
+        }
+    }
+
+    /**
+     * Use this for web application
+     *
+     * TODO: Complete this with login, logout and accessing a page
+     */
+    @Configuration
+    @Order(4)
+    public static class CookieBasedWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // For anything other than /api/** consider the resource protected.
             http
-                .antMatcher("/**")
-                .authorizeRequests()
+                    .antMatcher("/**")
+                    .authorizeRequests()
                     .anyRequest().authenticated()
-                .and()
+                    .and()
                     .formLogin();
         }
     }
-
 }

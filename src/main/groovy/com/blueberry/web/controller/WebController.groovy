@@ -1,23 +1,25 @@
 package com.blueberry.web.controller
 
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 /**
- * Sample controller for testing
+ * Test web controller
  *
  * @author Ganeshji Marwaha
  * @since 9/6/14
  */
 @RestController
-@RequestMapping("/api/sample")
-public class SampleController {
+@RequestMapping("/web")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
+public class WebController {
 
-    @RequestMapping(value="", method = GET)
+    @RequestMapping(value="/greet", method = GET)
     String greet() {
-        return "Hello world!"
+        return "Hello Web!"
     }
 
 }

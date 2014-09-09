@@ -6,6 +6,8 @@ import com.blueberry.model.dto.SpringUserDetails
 import com.blueberry.model.domain.User
 import com.blueberry.repository.RoleRepository
 import com.blueberry.repository.UserRepository
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -25,6 +27,8 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
+
+    protected final Log log = LogFactory.getLog(this.getClass());
 
     @Autowired
     UserRepository userRepository
@@ -64,6 +68,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        log.info("<<<<< UserDetails.loadByUserName >>>>>");
         User user = findUserByEmail(userName);
         if(user == null){
             throw new UsernameNotFoundException("UserName "+userName+" not found");

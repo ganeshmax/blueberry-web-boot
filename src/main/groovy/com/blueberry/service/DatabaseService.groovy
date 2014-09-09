@@ -35,15 +35,12 @@ class DatabaseService {
         userRepository
                 .saveAndFlush(new User(email: 'admin1@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(adminRole)
-
         userRepository
                 .saveAndFlush(new User(email: 'user1@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(userRole)
-
         userRepository
                 .saveAndFlush(new User(email: 'admin2@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(adminRole)
-
         userRepository
                 .saveAndFlush(new User(email: 'user2@email.com', password: 'password', phone: '123 456 7890'))
                 .addRole(userRole)
