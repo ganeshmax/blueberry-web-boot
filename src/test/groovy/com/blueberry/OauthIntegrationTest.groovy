@@ -42,6 +42,13 @@ class OauthIntegrationTest extends AbstractHttpIntegrationTest {
             code: ''
     ]
 
+    def oauthImplicitParams = [
+            client_id: 'blueberry-client-external',
+            response_type: 'token',
+            scope: 'read',
+            redirect_uri: 'http://localhost:8080/oauth/callback'
+    ]
+
     @Before
     public void setup() {
         http = new HTTPBuilder('http://localhost:8080/' )
@@ -50,14 +57,17 @@ class OauthIntegrationTest extends AbstractHttpIntegrationTest {
 
     @Test
     public void oauthAuthorizationCodeFlow() {
-        def out
-        def codeValue
+        def out, codeValue = ''
 
-        login()
+        out = login()
         out = auth()
 
         if(out.status == 302) {
-            codeValue = extractFromUrlParam(out.headers.Location, 'code')
+            def redirectUrl = out.headers.Location
+            log "Redirected URL 0: ${redirectUrl}"
+            assert redirectUrl != null
+
+            codeValue = extractFromUrlParam(redirectUrl, 'code')
         } else if (out.status == 200) {
             out = authConfirm()
             codeValue = extractFromUrlParam(out.headers.Location, 'code')
@@ -66,8 +76,35 @@ class OauthIntegrationTest extends AbstractHttpIntegrationTest {
         }
 
         log "Code Value: $codeValue"
+        assert codeValue != null
+        assert codeValue.size() == 6
 
         authToken(codeValue)
+    }
+
+    @Test
+    public void oauthImplicitFlow() {
+        def out, tokenValue = ''
+
+        out = login()
+        out = implicit()
+
+        if(out.status == 302) {
+            def redirectUrl = out.headers.Location
+            log "Redirected URL 1: ${redirectUrl}"
+            assert redirectUrl != null
+
+            tokenValue = extractFromFragment(redirectUrl, "access_token")
+        } else if (out.status == 200) {
+            out = authConfirm()
+            tokenValue = extractFromFragment(out.headers.Location, "access_token")
+        } else {
+            assert false
+        }
+
+        log "Token Value: $tokenValue"
+        assert tokenValue != null
+        assert tokenValue.size() == 36
     }
 
     def login() {
@@ -86,7 +123,7 @@ class OauthIntegrationTest extends AbstractHttpIntegrationTest {
 
     def authConfirm() {
         return http.post(path: 'oauth/authorize', body: oauthAuthConfirmParams) { response ->
-            assert response.status == 200
+            assert response.status == 302
             return response
         }
     }
@@ -96,9 +133,18 @@ class OauthIntegrationTest extends AbstractHttpIntegrationTest {
         addBasicAuth(http)
         return http.post(path: '/oauth/token', body: oauthAuthTokenParams) { response, json ->
             log "token: $json"
+            assert json.access_token != null
             removeBasicAuth(http)
             return response
         }
     }
+
+    def implicit() {
+        return http.get(path: 'oauth/authorize', query: oauthImplicitParams) { response ->
+            return response
+        }
+    }
+
+
 
 }

@@ -25,6 +25,8 @@ public class OauthController {
         String code = request.getParameter("code");
         String token = request.getParameter("access_token");
 
+        log.debug("<<<<< Request Parameter Names: " + request.getParameterMap() + ">>>>>")
+
         log.debug("<<<<< oauthCallbackCode >>>>>" + code);
         log.debug("<<<<< oauthCallbackToken >>>>>" + token);
 

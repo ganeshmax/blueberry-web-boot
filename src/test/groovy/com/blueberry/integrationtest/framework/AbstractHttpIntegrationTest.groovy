@@ -14,6 +14,19 @@ public abstract class AbstractHttpIntegrationTest {
         return paramPair[1]
     }
 
+    public String extractFromFragment(String url, String param)  {
+        def fragment = url.substring(url.lastIndexOf("#") + 1)
+        def fragmentParams = fragment.split("&")
+
+        for(String fragmentParam in fragmentParams) {
+            if(fragmentParam.startsWith("access_token")) {
+                def paramPair = fragmentParam.split("=")
+                return paramPair[1]
+            }
+        }
+        return null
+    }
+
     public void log(message) {
         println "<<<<< $message >>>>>"
     }
