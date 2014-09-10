@@ -1,9 +1,7 @@
 package com.blueberry
 
 import com.blueberry.framework.security.*
-
 import com.blueberry.service.UserService
-import com.blueberry.util.Constants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,7 +22,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint
 
-import static com.blueberry.util.Constants.*
+import static com.blueberry.model.dto.ClientType.*
+import static com.blueberry.model.dto.OauthFlowType.*
+import static com.blueberry.model.dto.OauthScopeType.*
+import static com.blueberry.util.Constants.APPLICATION_NAME
 
 /**
  * Configure spring security for REST and WEB and API modules
@@ -267,7 +268,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
         }
 
         /**
-         * This configures the
+         * This configures the in-memory clients, thereby providing the authorization with an implicit authentication
+         * manager for clients for oauth authorization server
          * @param clients
          * @throws Exception
          */
@@ -275,25 +277,25 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients
                     .inMemory()
-                        .withClient("blueberry-android")
-                            .secret("blueberry-android-password")
+                        .withClient(ANDROID.clientId)
+                            .secret(ANDROID.clientSecret)
                             .resourceIds(APPLICATION_NAME)
-                            .authorizedGrantTypes("password", "refresh_token")
-                            .scopes("read", "write", "trust")
+                            .authorizedGrantTypes(PASSWORD.name, REFRESH_TOKEN.name)
+                            .scopes(READ.name, WRITE.name, TRUST.name)
                             .authorities("ROLE_TRUSTED_CLIENT")
                     .and()
-                        .withClient("blueberry-ios")
-                            .secret("blueberry-ios-password")
+                        .withClient(IOS.clientId)
+                            .secret(IOS.clientSecret)
                             .resourceIds(APPLICATION_NAME)
-                            .authorizedGrantTypes("password", "refresh_token")
-                            .scopes("read", "write", "trust")
+                            .authorizedGrantTypes(PASSWORD.name, REFRESH_TOKEN.name)
+                            .scopes(READ.name, WRITE.name, TRUST.name)
                             .authorities("ROLE_TRUSTED_CLIENT")
                     .and()
-                        .withClient("blueberry-client-external")
-                            .secret("blueberry-client-external-password")
+                        .withClient(EXTERNAL.clientId)
+                            .secret(EXTERNAL.clientSecret)
                             .resourceIds(APPLICATION_NAME)
-                            .authorizedGrantTypes("authorization_code", "implicit", "refresh_token")
-                            .scopes("read", "write")
+                            .authorizedGrantTypes(AUTHORIZATION_CODE.name, IMPLICIT.name, REFRESH_TOKEN.name)
+                            .scopes(READ.name, WRITE.name)
                             .authorities("ROLE_CLIENT")
         }
 

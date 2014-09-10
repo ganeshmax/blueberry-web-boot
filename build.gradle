@@ -48,6 +48,8 @@ dependencies {
     testCompile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
 }
 
+configurations.all { exclude group: 'commons-logging' }
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
