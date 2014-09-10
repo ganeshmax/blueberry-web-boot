@@ -27,7 +27,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import static com.blueberry.util.Constants.*
 
 /**
- * Configure spring security for REST and WEB applications
+ * Configure spring security for REST and WEB and API modules
  * Found by the app because of ComponentScan on ApplicationConfig.
  *
  * @author Ganeshji Marwaha
@@ -35,20 +35,40 @@ import static com.blueberry.util.Constants.*
  */
 @Configuration
 @EnableWebMvcSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 
     @Autowired
     UserService userService;
 
+    /**
+     * Configure a global authentication manager which will be used by web, rest and api modules.
+     * The reason is that, this system's users are always the same with the same credentials regardless of whether
+     * a web client, an api client or rest client accesses it. So, the same authentication manager can be used
+     * across all the modules as long as it is for user authentication
+     *
+     * @param auth
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         auth.userDetailsService(userService)
     }
 
     /**
-     * Exposing this bean because we are using it to be autowired into OauthBasedRestSecurityAuthorizationServerConfig
-     * This way, the same AuthenticationManager is used for web security, rest security and api security
+     * In general, when we build the authenticationManager globally using the builder, it is set globally and used by
+     * other HTTP endpoints. In our example, both the web and rest endpoints will use it.
+     *
+     * But, since Oauth config needs 2 authentication managers, one for client and one for users it won't know
+     * which one to pick for what. Not only that, there is also a convention that the password flow is enabled only
+     * when the user auth-manager is set explicitly. Otherwise, "password" flow remains disabled. This sounds logical
+     * because, for authorization_code and implicit flow, the authorization server need not perform authentication at
+     * all. It is performed by the regular web app. So, in those cases, the authorization server doesn't even need to
+     * know about the authentication manager.
+     *
+     * So, we specify client auth-manager separately by specifying an in-memory client-details service.
+     * But, then we will have to specify the user auth-manager. That cannot be done, unless we
+     * expose it to the container as a bean. This method makes the global auth-manager available as a spring bean. We
+     * can then Autowire this in the Oauth config class and set it.
      *
      * @return
      * @throws Exception
@@ -72,7 +92,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
             http
                 .antMatcher("/rest/**")
                 .authorizeRequests()
-                    .antMatchers("/rest/sample").permitAll()
+                    .antMatchers("/rest/sample/**").permitAll()
                     .antMatchers("/rest/login", "/rest/logout").permitAll()
                     .anyRequest().authenticated()
 
@@ -102,24 +122,29 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
                 .csrf().disable()
         }
 
+        @Bean
         public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
             return new RestAuthenticationEntryPoint();
         }
 
+        @Bean
         public RestAuthenticationSuccessHandler restAuthenticationSuccessHandler() {
             RestAuthenticationSuccessHandler handler = new RestAuthenticationSuccessHandler();
             //        handler.setRequestCache(requestCache);
             return handler;
         }
 
+        @Bean
         public RestAuthenticationFailureHandler restAuthenticationFailureHandler() {
             return new RestAuthenticationFailureHandler();
         }
 
+        @Bean
         public RestLogoutSuccessHandler restLogoutSuccessHandler() {
             return new RestLogoutSuccessHandler();
         }
 
+        @Bean
         public RestAccessDeniedHandler restAccessDeniedHandler() {
             return new RestAccessDeniedHandler();
         }
@@ -131,18 +156,22 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
      * Here, we try to protect the resource server using oauth. So, the first thing we do is configure it to be
      * protected for specific url patterns (like /api/**). But what happens if the client accesses the url without
      * an access_token. Since an oauthAuthenticationEntryPoint is specified, spring sends back a 401 instead of
-     * redirecting the user back to the login page.
+     * redirecting the user back to the login page. Otherwise a login page will be served and that would be wrong.
+     *
+     * If you did not protect specific patterns using http builder, then ss will automatically protect every other URL
+     * that was not protected except those that are explicitly ignore()d and ones exposed by the authorization server
+     * (like /oauth/authorize, /oauth/token etc.). In this case, we may not have to specify the entry-point ourselves
+     * because even that would be automatic. But since, we do customize protection, we will have to set the entry-point
+     * or that is what i think.
      *
      * This should tell the client that they are not authorized to access the resource. This means that the client
      * can first go to the authorization server and try to authenticate (get an access token) before coming back and
-     * trying to access the resource.
+     * trying to access the resource. The client may do this by redirecting the user to the authorize or token urls
+     * depending on whether the client is trusted or not.
      *
-     * The client may do this by redirecting the user to the authorize or token urls depending on whether the client is
-     * trusted or not.
-     *
-     * A trusted client will ask the user for username and password and send tha to /oauth/token flow.
+     * A trusted client will ask the user for username and password and send them to /oauth/token flow.
      * An untrusted client will not have permission to perform the above "password" flow. So, they will redirect the
-     * user to the /oauth/authrorize flow where the oauth dance begins and finally results in an access token.
+     * user to the /oauth/authorize flow where the oauth dance begins and finally results in an access token.
      *
      * Regardless of the path taken by the client, the result is an access_token. Then the client can use this
      * access_token to access the resource here.
@@ -169,7 +198,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
             http
                 .antMatcher("/api/**")
                 .authorizeRequests()
-                    .anyRequest().access("#oauth2.hasScope('read') or #oauth2.hasScope('write') or #oauth2.hasScope('trust')");
+                    .anyRequest().authenticated()
 
             http.exceptionHandling()
                 .authenticationEntryPoint(new OAuth2AuthenticationEntryPoint())
@@ -212,7 +241,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
      * general, the clients are setup in-memory. So, by providing an inMemory() clientDetailsService, we implicitly
      * give spring an authentication manager to deal with #1. Next, since the user credentials need the same
      * authentication mechanism used by web, because the user is the same, we can provide an instance of regular web
-     * authentication manager to deal with #2.
+     * authentication manager to deal with #2. #2 is mandatory only for "password" flow and this flow gets enabled
+     * implicitly when it is set
      *
      * Once we give that, spring will authenticate the client first, the user next and offer the access token back. Now,
      * the client can use the access token to request the resource server.
@@ -248,22 +278,30 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
                         .withClient("blueberry-android")
                             .secret("blueberry-android-password")
                             .resourceIds(APPLICATION_NAME)
-                            .authorizedGrantTypes("password")
+                            .authorizedGrantTypes("password", "refresh_token")
                             .scopes("read", "write", "trust")
                             .authorities("ROLE_TRUSTED_CLIENT")
                     .and()
                         .withClient("blueberry-ios")
                             .secret("blueberry-ios-password")
                             .resourceIds(APPLICATION_NAME)
-                            .authorizedGrantTypes("password")
+                            .authorizedGrantTypes("password", "refresh_token")
                             .scopes("read", "write", "trust")
                             .authorities("ROLE_TRUSTED_CLIENT")
+                    .and()
+                        .withClient("blueberry-client-external")
+                            .secret("blueberry-client-external-password")
+                            .resourceIds(APPLICATION_NAME)
+                            .authorizedGrantTypes("authorization_code", "implicit", "refresh_token")
+                            .scopes("read", "write")
+                            .authorities("ROLE_CLIENT")
         }
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
                     .authenticationManager(authenticationManager)
+
         }
     }
 
@@ -281,10 +319,14 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
             // For anything other than /api/** consider the resource protected.
             http
                     .antMatcher("/**")
-                    .authorizeRequests()
-                    .anyRequest().authenticated()
+                        .authorizeRequests()
+                            .antMatchers("/oauth/token").permitAll()
+                            .anyRequest().authenticated()
                     .and()
-                    .formLogin();
+                        .formLogin()
+                    .and()
+                        .csrf().disable()
+
         }
     }
 }

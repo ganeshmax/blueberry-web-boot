@@ -1,7 +1,6 @@
-package com.blueberry.web.resource
+package com.blueberry.presentation.rest
 
 import com.blueberry.framework.dto.Dto
-import com.blueberry.model.domain.Role
 import com.blueberry.model.dto.RoleType
 import com.blueberry.model.domain.User
 
@@ -31,7 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/rest/users")
-public class UserResource {
+public class UserController {
 
     @Autowired
     UserService userService
