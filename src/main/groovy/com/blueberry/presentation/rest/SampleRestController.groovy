@@ -1,5 +1,6 @@
 package com.blueberry.presentation.rest
 
+import com.blueberry.framework.presentation.PresentationRestController
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -15,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET
 @RestController
 @RequestMapping("/rest/sample")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
-class SampleRestController {
+class SampleRestController extends PresentationRestController {
 
     @RequestMapping(value="/greet", method = GET)
     String greet() {

@@ -1,7 +1,7 @@
-package com.blueberry
+package com.blueberry.presentation.api
 
-import com.blueberry.integrationtest.framework.AbstractHttpIntegrationTest
-import com.blueberry.integrationtest.framework.NoRedirectionStrategy
+import com.blueberry.test.framework.AbstractHttpIntegrationTest
+import com.blueberry.test.framework.NoRedirectionStrategy
 import groovyx.net.http.HTTPBuilder
 import org.junit.Before
 import org.junit.Test
@@ -9,7 +9,7 @@ import org.junit.Test
 import static com.blueberry.model.dto.ClientType.ANDROID
 import static com.blueberry.model.dto.ClientType.EXTERNAL
 import static groovyx.net.http.ContentType.*
-import static com.blueberry.integrationtest.framework.HttpBuilderUtil.*
+import static com.blueberry.test.framework.HttpBuilderUtil.*
 
 /**
  * Integration test for oauth

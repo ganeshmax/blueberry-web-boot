@@ -2,6 +2,7 @@ package com.blueberry.model.domain
 
 import com.blueberry.framework.domain.DbEntity
 import com.blueberry.framework.validation.ValidateEmail
+import groovy.transform.ToString
 
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "t_user")
+@ToString(includeNames = true, includePackage = false, includeSuper = true)
 public class User extends DbEntity {
 
     @Column(name = "email", nullable = false, unique = true, length = 255)
@@ -38,6 +40,12 @@ public class User extends DbEntity {
 
         this.roles.add(role);
         role.addUser(this);
+    }
+
+    public void update(User changedUser) {
+        this.email = changedUser.email
+        this.password = changedUser.password
+        this.phone = changedUser.phone
     }
 
 }

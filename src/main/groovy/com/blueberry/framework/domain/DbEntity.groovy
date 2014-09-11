@@ -1,7 +1,8 @@
 package com.blueberry.framework.domain;
 
 import com.blueberry.framework.dto.Dto;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty
+import groovy.transform.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  */
 
 @MappedSuperclass
+@ToString(includeNames = true, includePackage = false)
 public class DbEntity implements Serializable {
 
     @Id

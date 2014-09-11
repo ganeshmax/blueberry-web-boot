@@ -1,8 +1,7 @@
 package com.blueberry.framework.security
 
 import groovy.json.JsonBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import groovy.util.logging.Slf4j
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 
@@ -20,9 +19,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Ganeshji Marwaha
  * @since 8/24/14
  */
+@Slf4j
 public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
-
-    protected final Log log = LogFactory.getLog(this.getClass());
 
     @Override
     void onAuthenticationFailure(HttpServletRequest request,

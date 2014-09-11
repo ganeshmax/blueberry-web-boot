@@ -1,8 +1,7 @@
 package com.blueberry.framework.security
 
 import groovy.json.JsonBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import groovy.util.logging.Slf4j
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 
@@ -20,9 +19,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Ganeshji Marwaha
  * @since 8/24/14
  */
+@Slf4j
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
-
-    protected final Log log = LogFactory.getLog(this.getClass());
 
     @Override
     void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)

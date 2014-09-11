@@ -1,11 +1,13 @@
 TODO:
+-----
 Learn thymeleaf and configure it and set it up to work with user controller. Create user controller as well
-Modify resource controllers url mapping to /resource/**
-Setup spring security oauth 2 and point it to /api/**. Setup only password credentials for the same.
 Setup liquibase or equivalent database migration tool and automate as much as possible
 Customize object mapper for Jackson
-Learn and complete integration testing
-Test the OAuth2 password flow once
 
 DONE:
+-----
 Setup validation both with @Valid and any other proper option. Learn it first
+Test the OAuth2 password flow once
+Learn and complete integration testing
+Modify resource controllers url mapping to /resource/**
+Setup spring security oauth 2 and point it to /api/**. Setup only password credentials for the same.

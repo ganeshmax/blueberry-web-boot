@@ -10,11 +10,12 @@ spring:
     username: bb_dev
     password: bb_dev_pwd
 
-logging:
-  level:
-    com.blueberry: DEBUG
-    org.hibernate.SQL: DEBUG                                # Equivalent of show_sql
-    org.hibernate.type: TRACE                               # Shows parameter values bound to SQL
+# Added logback.groovy to configure this explicitly
+#logging:
+#  level:
+#    com.blueberry: TRACE
+#    org.hibernate.SQL: DEBUG                                # DEBUG for Equivalent of show_sql
+#    org.hibernate.type: DEBUG                               # TRACE for parameter values bound to SQL
 
 server:
   port: 8080

@@ -14,7 +14,9 @@ public enum RoleType {
     ROLE_RECEIVER(4),
     ROLE_USER(5)
 
-    private RoleType(Integer roleId) {
+    Integer roleId
 
+    private RoleType(Integer roleId) {
+        this.roleId = roleId
     }
 }

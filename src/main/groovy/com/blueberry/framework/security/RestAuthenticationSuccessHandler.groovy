@@ -1,13 +1,11 @@
 package com.blueberry.framework.security
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import groovy.util.logging.Slf4j
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
 import org.springframework.security.web.savedrequest.RequestCache
 import org.springframework.security.web.savedrequest.SavedRequest
-import org.springframework.util.StringUtils
 
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
@@ -23,9 +21,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Ganeshji Marwaha
  * @since 8/24/14
  */
+@Slf4j
 public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    protected final Log log = LogFactory.getLog(this.getClass());
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 

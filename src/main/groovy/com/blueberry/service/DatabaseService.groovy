@@ -4,6 +4,7 @@ import com.blueberry.model.domain.Role
 import com.blueberry.model.domain.User
 import com.blueberry.repository.RoleRepository
 import com.blueberry.repository.UserRepository
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -17,6 +18,7 @@ import javax.transaction.Transactional
  */
 @Service
 @Transactional
+@Slf4j
 class DatabaseService {
 
     @Autowired

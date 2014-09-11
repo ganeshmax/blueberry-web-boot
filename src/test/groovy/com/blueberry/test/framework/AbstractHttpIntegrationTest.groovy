@@ -1,4 +1,4 @@
-package com.blueberry.integrationtest.framework
+package com.blueberry.test.framework
 
 /**
  * TODO: Document Me

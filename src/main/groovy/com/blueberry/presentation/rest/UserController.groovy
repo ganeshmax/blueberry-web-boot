@@ -1,12 +1,10 @@
 package com.blueberry.presentation.rest
 
 import com.blueberry.framework.dto.Dto
-import com.blueberry.model.dto.RoleType
+import com.blueberry.framework.presentation.PresentationRestController
 import com.blueberry.model.domain.User
-
 import com.blueberry.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.BindingResult
@@ -30,7 +28,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/rest/users")
-public class UserController {
+public class UserController extends PresentationRestController {
 
     @Autowired
     UserService userService
@@ -42,7 +40,7 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method = GET)
     ResponseEntity<Dto> show(@PathVariable Long id) {
-        User user = userService.findUserById(id)
+        User user = userService.findById(id)
         return user ? Dto.forEntity(user) : Dto.forStatus(NOT_FOUND)
     }
 
@@ -55,11 +53,18 @@ public class UserController {
         }
 
         // Add any user with a default role of ROLE_USER
-        userService.create(user, RoleType.ROLE_USER)
+        userService.create(user)
 
         return Dto.forEntity(user, CREATED)
     }
 
+    /**
+     * Do not use DomainClassConverter to auto-fetch user for update methods. Use that for get() style methods only
+     * @param currentUser
+     * @param changedUser
+     * @param result
+     * @return
+     */
     @RequestMapping(value="/{id}", method = PUT)
     ResponseEntity<Dto> update(@PathVariable Long id,
                                @RequestBody @Valid User changedUser,
@@ -69,24 +74,14 @@ public class UserController {
             return Dto.forErrors(result.getAllErrors())
         }
 
-        User currentUser = userService.findUserById(id)
-        if(currentUser == null) {
-            return Dto.forStatus(NOT_FOUND)
-        }
-
-        // TODO: Revisit how to handle this
-        User changedSavedUser = userService.update(changedUser)
+        User changedSavedUser = userService.update(id, changedUser)
         return Dto.forEntity(changedSavedUser)
+
     }
 
     @RequestMapping(value="/{id}", method = DELETE)
     ResponseEntity<Dto> delete(@PathVariable Long id) {
-
-        try {
-            userService.deleteUser(id)
-            return Dto.forStatus(NO_CONTENT)
-        } catch (EmptyResultDataAccessException e) {
-            return Dto.forStatus(NOT_FOUND)
-        }
+        userService.delete(id)
+        return Dto.forStatus(NO_CONTENT)
     }
 }

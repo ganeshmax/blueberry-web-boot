@@ -1,7 +1,6 @@
 package com.blueberry.framework.security
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import groovy.util.logging.Slf4j
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 
@@ -19,9 +18,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Ganeshji Marwaha
  * @since 8/24/14
  */
+@Slf4j
 public class RestLogoutSuccessHandler implements LogoutSuccessHandler {
-
-    protected final Log log = LogFactory.getLog(this.getClass());
 
     @Override
     void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

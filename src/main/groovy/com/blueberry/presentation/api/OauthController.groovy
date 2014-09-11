@@ -1,9 +1,7 @@
 package com.blueberry.presentation.api
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import com.blueberry.framework.presentation.PresentationRestController
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 import javax.servlet.http.HttpServletRequest
@@ -16,9 +14,7 @@ import javax.servlet.http.HttpServletRequest
  */
 @RestController
 @RequestMapping("/oauth")
-public class OauthController {
-
-    protected final Log log = LogFactory.getLog(this.getClass());
+public class OauthController extends PresentationRestController {
 
     @RequestMapping("/callback")
     public String oauthCallbackCode(HttpServletRequest request) {
