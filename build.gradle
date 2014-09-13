@@ -6,6 +6,8 @@ buildscript {
 
     repositories {
         maven { url 'http://repo.spring.io/libs-release' }
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url 'http://repo.spring.io/snapshot' }
         mavenLocal()
         mavenCentral()
     }
@@ -40,8 +42,10 @@ dependencies {
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.3.RELEASE'
 
     // Spring cloud service and heroku connector libraries
-    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.0.0.RELEASE'
-    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.0.0.RELEASE'
+//    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.0.0.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.1.0.BUILD-SNAPSHOT'
+//    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.0.0.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.1.0.BUILD-SNAPSHOT'
 
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
 
