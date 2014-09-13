@@ -6,9 +6,6 @@ spring:
 
 ---
 
-server:
-  port: 8080
-
 spring:
   profiles: dev
   datasource:
@@ -16,6 +13,9 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     username: bb_dev
     password: bb_dev_pwd
+
+server:
+  port: 8080
 
 ---
 
@@ -25,6 +25,8 @@ spring:
 
 spring:
   profiles: cloud
+
+server.port: ${port:8080}
 
 ---
 
