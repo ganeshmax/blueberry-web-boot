@@ -5,12 +5,12 @@ buildscript {
     }
 
     repositories {
-        maven { url "http://repo.spring.io/libs-release" }
+        maven { url 'http://repo.spring.io/libs-release' }
         mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE")
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE'
     }
 }
 
@@ -27,29 +27,42 @@ jar {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "http://repo.spring.io/libs-release" }
+    maven { url 'http://repo.spring.io/libs-release' }
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    // Spring boot libraries
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    compile "org.springframework.security.oauth:spring-security-oauth2:2.0.3.RELEASE"
+    // Spring libraries
+    compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.3.RELEASE'
 
-    compile "org.codehaus.groovy:groovy-all:2.3.6"
+    // Spring cloud service and heroku connector libraries
+    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.0.0.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.0.0.RELEASE'
 
-//    runtime "com.h2database:h2"
-    runtime("mysql:mysql-connector-java")
+    compile 'org.codehaus.groovy:groovy-all:2.3.6'
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.spockframework:spock-core:${spockVersion}"
-    testCompile "org.spockframework:spock-spring:${spockVersion}"
-    testCompile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
+    // Database Drivers
+    runtime "com.h2database:h2"
+//    runtime 'mysql:mysql-connector-java'
+    runtime 'postgresql:postgresql:9.0-801.jdbc4'
+
+    // Test libraries
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+//    testCompile 'org.spockframework:spock-core:${spockVersion}'
+//    testCompile 'org.spockframework:spock-spring:${spockVersion}'
+    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
 }
 
 configurations.all { exclude group: 'commons-logging' }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
+}
+
+task stage {
+    dependsOn installApp
 }

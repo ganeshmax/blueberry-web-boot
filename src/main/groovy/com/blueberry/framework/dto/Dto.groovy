@@ -20,41 +20,5 @@ import static org.springframework.http.HttpStatus.*
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dto implements Serializable {
 
-    List<ObjectError> errors
 
-    DbEntity entity
-
-    List<? extends DbEntity> entities
-
-    public static ResponseEntity<Dto> forEntity(DbEntity entity) {
-        return forEntity(entity, OK)
-    }
-
-    public static ResponseEntity<Dto> forEntity(DbEntity entity, HttpStatus status) {
-        return new ResponseEntity<Dto>(new Dto(entity: entity), status)
-    }
-
-    public static ResponseEntity<Dto> forEntities(Collection<DbEntity> entities) {
-        return forEntities(entities, OK)
-    }
-
-    public static ResponseEntity<Dto> forEntities(Collection<DbEntity> entities, HttpStatus status) {
-        return new ResponseEntity<Dto>(new Dto(entities: entities), OK)
-    }
-
-    public static ResponseEntity<Dto> forErrors(List<ObjectError> errors) {
-        return forErrors(errors, UNPROCESSABLE_ENTITY)
-    }
-
-    public static ResponseEntity<Dto> forErrors(List<ObjectError> errors, HttpStatus status) {
-        return new ResponseEntity<Dto>(new Dto(errors: errors), status)
-    }
-
-    public static ResponseEntity<Dto> forStatus(HttpStatus status) {
-        return new ResponseEntity<Dto>(status)
-    }
-
-    public static ResponseEntity<Dto> success() {
-        forStatus(OK)
-    }
 }

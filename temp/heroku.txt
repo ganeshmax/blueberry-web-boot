@@ -1,0 +1,11 @@
+heroku login
+heroku apps:create
+heroku config:set SPRING_CLOUD_APP_NAME=hello-spring-cloud
+git push heroku master
+
+
+# heroku addons:add mongolab
+# heroku addons:add rediscloud
+# heroku addons:add cloudamqp
+
+api key: e91ef3136f75b22c522e1d85b0f8ea90dd34f43c

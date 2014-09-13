@@ -1,6 +1,6 @@
 package com.blueberry.presentation.rest
 
-import com.blueberry.framework.dto.Dto
+import com.blueberry.framework.dto.RestDto
 import com.blueberry.framework.presentation.PresentationRestController
 import com.blueberry.model.domain.User
 import com.blueberry.service.UserService
@@ -34,28 +34,26 @@ public class UserController extends PresentationRestController {
     UserService userService
 
     @RequestMapping(value="", method = GET)
-    ResponseEntity<Dto> index() {
-        return Dto.forEntities(userService.findAll())
+    ResponseEntity<RestDto> index() {
+        return RestDto.forEntities(userService.findAll())
     }
 
     @RequestMapping(value="/{id}", method = GET)
-    ResponseEntity<Dto> show(@PathVariable Long id) {
+    ResponseEntity<RestDto> show(@PathVariable Long id) {
         User user = userService.findById(id)
-        return user ? Dto.forEntity(user) : Dto.forStatus(NOT_FOUND)
+        return user ? RestDto.forEntity(user) : RestDto.forStatus(NOT_FOUND)
     }
 
     @RequestMapping(value="", method = POST)
-    ResponseEntity<Dto> save(@RequestBody @Valid User user,
+    ResponseEntity<RestDto> save(@RequestBody @Valid User user,
                              BindingResult result) {
 
         if(result.hasErrors()) {
-            return Dto.forErrors(result.getAllErrors())
+            return RestDto.forErrors(result.getAllErrors())
         }
-
-        // Add any user with a default role of ROLE_USER
         userService.create(user)
 
-        return Dto.forEntity(user, CREATED)
+        return RestDto.forEntity(user, CREATED)
     }
 
     /**
@@ -66,22 +64,22 @@ public class UserController extends PresentationRestController {
      * @return
      */
     @RequestMapping(value="/{id}", method = PUT)
-    ResponseEntity<Dto> update(@PathVariable Long id,
+    ResponseEntity<RestDto> update(@PathVariable Long id,
                                @RequestBody @Valid User changedUser,
                                BindingResult result) {
 
         if(result.hasErrors()) {
-            return Dto.forErrors(result.getAllErrors())
+            return RestDto.forErrors(result.getAllErrors())
         }
 
         User changedSavedUser = userService.update(id, changedUser)
-        return Dto.forEntity(changedSavedUser)
+        return RestDto.forEntity(changedSavedUser)
 
     }
 
     @RequestMapping(value="/{id}", method = DELETE)
-    ResponseEntity<Dto> delete(@PathVariable Long id) {
+    ResponseEntity<RestDto> delete(@PathVariable Long id) {
         userService.delete(id)
-        return Dto.forStatus(NO_CONTENT)
+        return RestDto.forStatus(NO_CONTENT)
     }
 }

@@ -1,11 +1,15 @@
 package com.blueberry.presentation.web
 
 import com.blueberry.framework.presentation.PresentationWebController
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cloud.app.ApplicationInstanceInfo
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 
-import static org.springframework.web.bind.annotation.RequestMethod.*
+import javax.sql.DataSource
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET
 
 /**
  * Sample web controller.
@@ -13,7 +17,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
  * @author Ganeshji Marwaha
  * @since 9/6/14
  */
-@RestController
+@Controller
 @RequestMapping("/web")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class SampleWebController extends PresentationWebController {

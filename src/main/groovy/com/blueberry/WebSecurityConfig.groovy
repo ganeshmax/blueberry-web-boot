@@ -323,6 +323,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
                     .antMatcher("/**")
                         .authorizeRequests()
                             .antMatchers("/oauth/token").permitAll()
+                            .antMatchers("/web/system").permitAll()
                             .anyRequest().authenticated()
                     .and()
                         .formLogin()

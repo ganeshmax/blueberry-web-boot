@@ -1,21 +1,35 @@
 spring:
   jpa:
-#   show_sql: true
     generate_ddl: true
     hibernate:
       ddl_auto: create-drop
+
+---
+
+server:
+  port: 8080
+
+spring:
+  profiles: dev
   datasource:
     url: jdbc:mysql://localhost:3306/blueberry
     driverClassName: com.mysql.jdbc.Driver
     username: bb_dev
     password: bb_dev_pwd
 
-# Added logback.groovy to configure this explicitly
-#logging:
-#  level:
-#    com.blueberry: TRACE
-#    org.hibernate.SQL: DEBUG                                # DEBUG for Equivalent of show_sql
-#    org.hibernate.type: DEBUG                               # TRACE for parameter values bound to SQL
+---
 
-server:
-  port: 8080
+# default active profile for heroku is "cloud" set in Procfile
+# currently no configuration is needed for the cloud. spring-cloud and spring-boot handles it all by default
+# configure additional cloud specific configurations here
+
+spring:
+  profiles: cloud
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=PostgreSQL
