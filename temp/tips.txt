@@ -1,2 +1,4 @@
 
 Add data.sql and schema.sql under resources (classpath). Spring will automagically execute them during startup
+
+Do not @EnableWebMvc. If you do, many mvc based spring-boot autoconfiguration will stop. Like mapping resources/** etc.

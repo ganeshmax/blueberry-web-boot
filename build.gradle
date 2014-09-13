@@ -1,71 +1,69 @@
+ext {
+    spockVersion = "0.7-groovy-2.0"
+}
 
 buildscript {
-    ext {
-        spockVersion = '0.7-groovy-2.0'
-    }
-
     repositories {
-        maven { url 'http://repo.spring.io/libs-release' }
-
         mavenLocal()
         mavenCentral()
+        maven { url "http://repo.spring.io/libs-release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE'
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE"
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: "java"
+apply plugin: "groovy"
+apply plugin: "idea"
+apply plugin: "spring-boot"
 
 jar {
-    baseName = 'blueberry'
-    version =  '0.1.0'
+    baseName = "blueberry"
+    version =  "0.1.0"
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'http://repo.spring.io/libs-release' }
-//    maven { url 'http://repo.spring.io/milestone' }
-//    maven { url 'http://repo.spring.io/snapshot' }
+    maven { url "http://repo.spring.io/libs-release" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
 }
 
 dependencies {
     // Spring boot libraries
-    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
 
     // Spring libraries
-    compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.3.RELEASE'
+    compile "org.springframework.security.oauth:spring-security-oauth2:2.0.3.RELEASE"
 
     // Spring cloud service and heroku connector libraries
-    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.0.0.RELEASE'
-//    compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.1.0.BUILD-SNAPSHOT'
-    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.0.0.RELEASE'
-//    compile 'org.springframework.cloud:spring-cloud-heroku-connector:1.1.0.BUILD-SNAPSHOT'
+    compile "org.springframework.cloud:spring-cloud-spring-service-connector:1.0.0.RELEASE"
+    compile "org.springframework.cloud:spring-cloud-heroku-connector:1.0.0.RELEASE"
 
-    compile 'org.codehaus.groovy:groovy-all:2.3.6'
+    compile "org.codehaus.groovy:groovy-all:2.3.6"
 
     // Database Drivers
     runtime "com.h2database:h2"                     // May use for test
-    runtime 'mysql:mysql-connector-java'            // Used for dev
-    runtime 'postgresql:postgresql:9.0-801.jdbc4'   // Used for cloud
+    runtime "mysql:mysql-connector-java"            // Used for dev
+    runtime "postgresql:postgresql:9.0-801.jdbc4"   // Used for cloud
 
     // Test libraries
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
-//    testCompile 'org.spockframework:spock-core:${spockVersion}'
-//    testCompile 'org.spockframework:spock-spring:${spockVersion}'
-    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-core:${spockVersion}"
+    testCompile "org.spockframework:spock-spring:${spockVersion}"
+    testCompile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
 }
 
-configurations.all { exclude group: 'commons-logging' }
+configurations.all { exclude group: "commons-logging" }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = "1.11"
 }
 
 task stage {
