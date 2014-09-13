@@ -64,5 +64,5 @@ task wrapper(type: Wrapper) {
 }
 
 task stage {
-    dependsOn installApp
+    dependsOn assemble
 }
