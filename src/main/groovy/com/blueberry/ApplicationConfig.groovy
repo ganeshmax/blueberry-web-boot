@@ -1,6 +1,7 @@
 package com.blueberry
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.context.web.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.EnableAspectJAutoProxy
@@ -20,5 +21,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @EnableTransactionManagement(proxyTargetClass = true)   // Required if you want to use Services without interfaces
 @EnableJpaRepositories                                  // Optional: Spring boot would have added this
-class ApplicationConfig {
+class ApplicationConfig extends SpringBootServletInitializer {
 }

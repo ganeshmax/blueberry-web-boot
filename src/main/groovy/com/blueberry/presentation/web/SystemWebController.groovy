@@ -3,6 +3,7 @@ package com.blueberry.presentation.web
 import com.blueberry.framework.presentation.PresentationWebController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.app.ApplicationInstanceInfo
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.util.ReflectionUtils
@@ -20,6 +21,7 @@ import java.lang.reflect.Method
  */
 @Controller
 @RequestMapping("/web")
+@Profile("cloud")
 class SystemWebController extends PresentationWebController {
 
     @Autowired(required = false) DataSource dataSource;

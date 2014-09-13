@@ -51,9 +51,9 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
 
     // Database Drivers
-//    runtime "com.h2database:h2"
-    runtime 'mysql:mysql-connector-java'
-    runtime 'postgresql:postgresql:9.0-801.jdbc4'
+    runtime "com.h2database:h2"                     // May use for test
+    runtime 'mysql:mysql-connector-java'            // Used for dev
+    runtime 'postgresql:postgresql:9.0-801.jdbc4'   // Used for cloud
 
     // Test libraries
     testCompile 'org.springframework.boot:spring-boot-starter-test'
