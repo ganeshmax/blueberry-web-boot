@@ -9,3 +9,8 @@ git push heroku master
 # heroku addons:add cloudamqp
 
 api key: e91ef3136f75b22c522e1d85b0f8ea90dd34f43c
+
+
+Heroku did not create a free postgresql addon (hobby dev) by default. I added one myself. it added it at this URL
+HEROKU_POSTGRESQL_WHITE_URL
+
