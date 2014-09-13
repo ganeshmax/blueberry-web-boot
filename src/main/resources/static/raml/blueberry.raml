@@ -1,7 +1,8 @@
 #%RAML 0.8
 ---
 title: Blueberry
-baseUri: http://blueberry-02.herokuapp.com/rest
+#baseUri: http://blueberry-02.herokuapp.com/rest
+baseUri: http://localhost:8080/rest
 mediaType: application/json
 version: v1
 
@@ -23,6 +24,16 @@ resourceTypes:
             body:
               application/json:
                 example: <<exampleCollection>>
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
       post:
         description: Create a new <<resourcePathName|!singularize>>
         headers:
@@ -44,6 +55,17 @@ resourceTypes:
             body:
               application/json:
                 example: <<exampleItemError>>
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
+
 
   - collection-item:
       description: <<resourcePathName|!singularize>> Entity
@@ -61,6 +83,17 @@ resourceTypes:
                 example: <<exampleItem>>
           404:
             description: Error - <<resourcePathName|!singularize>> not found
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
+
 
       put:
         description: Update a <<resourcePathName|!singularize>> by id
@@ -85,6 +118,17 @@ resourceTypes:
             body:
               application/json:
                 example: <<exampleItemError>>
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
+
       delete:
         description: Delete a <<resourcePathName|!singularize>> by id
         headers:
@@ -96,6 +140,17 @@ resourceTypes:
             description: Success - <<resourcePathName|!singularize>> deleted
           404:
             description: Error - <<resourcePathName|!singularize>> not found
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
+
 
   - readOnlyCollection:
       description: Collection of <<resourcePathName>>
@@ -106,6 +161,17 @@ resourceTypes:
             body:
               application/json:
                 example: <<exampleCollection>>
+          403:
+            description: Error - Permission error
+            body:
+              application/json:
+                example: <<exampleForbiddenError>>
+          401:
+            description: Error - Authentication error
+            body:
+              application/json:
+                example: <<exampleAuthenticationError>>
+
 
 /login:
   post:
@@ -130,7 +196,7 @@ resourceTypes:
         description: Error - Unauthorized
         body:
           application/json:
-            example: !include login/login-error.sample
+            example: !include security/login-error.sample
 
 /logout:
   post:
@@ -142,14 +208,18 @@ resourceTypes:
 /users:
   type:
     collection:
-      exampleCollection:    !include user/users.sample
-      exampleNewItem:       !include user/user-new.sample
-      exampleItem:          !include user/user.sample
-      exampleItemError:     !include user/user-error.sample
+      exampleCollection:              !include user/users.sample
+      exampleNewItem:                 !include user/user-new.sample
+      exampleItem:                    !include user/user.sample
+      exampleItemError:               !include user/user-error.sample
+      exampleForbiddenError:          !include security/forbidden-error.sample
+      exampleAuthenticationError:     !include security/unauthenticated-error.sample
 
   /{id}:
     type:
       collection-item:
-        exampleItem:        !include user/user.sample
-        exampleItemError:   !include user/user-error.sample
+        exampleItem:                    !include user/user.sample
+        exampleItemError:               !include user/user-error.sample
+        exampleForbiddenError:          !include security/forbidden-error.sample
+        exampleAuthenticationError:     !include security/unauthenticated-error.sample
 

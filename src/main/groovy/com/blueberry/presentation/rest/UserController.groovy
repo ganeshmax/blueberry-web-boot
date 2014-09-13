@@ -26,7 +26,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
  */
 
 @RestController
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 @RequestMapping("/rest/users")
 public class UserController extends PresentationRestController {
 

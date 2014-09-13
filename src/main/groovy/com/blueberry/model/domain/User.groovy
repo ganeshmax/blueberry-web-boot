@@ -9,6 +9,8 @@ import javax.persistence.*
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
+import static javax.persistence.CascadeType.*
+
 @Entity
 @Table(name = "t_user")
 @ToString(includeNames = true, includePackage = false, includeSuper = true)
@@ -29,7 +31,7 @@ public class User extends DbEntity {
     String phone;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [PERSIST, MERGE, DETACH])
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

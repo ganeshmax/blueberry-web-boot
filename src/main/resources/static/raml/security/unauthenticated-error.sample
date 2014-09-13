@@ -1,0 +1,6 @@
+{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}

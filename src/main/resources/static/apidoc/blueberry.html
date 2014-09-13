@@ -107,7 +107,7 @@
         .method_description p:last-child {
             margin: 0;
         }
-    </style></head><body data-spy=scroll data-target=#sidebar><div class=container><div class=row><div class=col-md-9 role=main><div class=page-header><h1>Blueberry API documentation <small>version v1</small></h1><p>http://blueberry-02.herokuapp.com/rest</p></div><div class="panel panel-default"><div class=panel-heading><h3 id=_login class=panel-title>/login</h3></div><div class=panel-body><div class=panel-group><div class="panel panel-white"><div class=panel-heading><h4 class=panel-title><a class=collapsed data-toggle=collapse href=#panel__login><span class=parent></span>/login</a> <span class=methods><a href=# data-toggle=modal data-target=#_login_post><span class="badge badge_post">post</span></a></span></h4></div><div id=panel__login class="panel-collapse collapse"><div class=panel-body><div class=list-group><a href=# data-toggle=modal data-target=#_login_post class=list-group-item><span class="badge badge_post">post</span><div class=method_description><p>Login to the application</p></div><div class=clearfix></div></a></div></div></div><div class="modal fade" tabindex=0 id=_login_post><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_post">post</span> <span class=parent></span>/login</h4></div><div class=modal-body><div class="alert alert-info"><p>Login to the application</p></div><ul class="nav nav-tabs"><li class=active><a href=#_login_post_request data-toggle=tab>Request</a></li><li><a href=#_login_post_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_login_post_request><h3>Body</h3><p><strong>Type: application/x-www-form-urlencoded</strong></p><strong>Form Parameters</strong><ul><li><strong>username</strong>: <em>required (string)</em><p>The email ID for the user</p><p><small><strong>Example</strong>:<pre><code>user1@email.com</code></pre></small></p></li><li><strong>password</strong>: <em>required (string)</em><p>The password for the user</p><p><small><strong>Example</strong>:<pre><code>password</code></pre></small></p></li></ul></div><div class=tab-pane id=_login_post_response><h2>HTTP status code <a href=http://httpstatus.es/200 target=_blank>200</a></h2><p>Success - Logged In. Use the returned cookie (jsessionid) on all subsequent requests</p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Unauthorized</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    </style></head><body data-spy=scroll data-target=#sidebar><div class=container><div class=row><div class=col-md-9 role=main><div class=page-header><h1>Blueberry API documentation <small>version v1</small></h1><p>http://localhost:8080/rest</p></div><div class="panel panel-default"><div class=panel-heading><h3 id=_login class=panel-title>/login</h3></div><div class=panel-body><div class=panel-group><div class="panel panel-white"><div class=panel-heading><h4 class=panel-title><a class=collapsed data-toggle=collapse href=#panel__login><span class=parent></span>/login</a> <span class=methods><a href=# data-toggle=modal data-target=#_login_post><span class="badge badge_post">post</span></a></span></h4></div><div id=panel__login class="panel-collapse collapse"><div class=panel-body><div class=list-group><a href=# data-toggle=modal data-target=#_login_post class=list-group-item><span class="badge badge_post">post</span><div class=method_description><p>Login to the application</p></div><div class=clearfix></div></a></div></div></div><div class="modal fade" tabindex=0 id=_login_post><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_post">post</span> <span class=parent></span>/login</h4></div><div class=modal-body><div class="alert alert-info"><p>Login to the application</p></div><ul class="nav nav-tabs"><li class=active><a href=#_login_post_request data-toggle=tab>Request</a></li><li><a href=#_login_post_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_login_post_request><h3>Body</h3><p><strong>Type: application/x-www-form-urlencoded</strong></p><strong>Form Parameters</strong><ul><li><strong>username</strong>: <em>required (string)</em><p>The email ID for the user</p><p><small><strong>Example</strong>:<pre><code>user1@email.com</code></pre></small></p></li><li><strong>password</strong>: <em>required (string)</em><p>The password for the user</p><p><small><strong>Example</strong>:<pre><code>password</code></pre></small></p></li></ul></div><div class=tab-pane id=_login_post_response><h2>HTTP status code <a href=http://httpstatus.es/200 target=_blank>200</a></h2><p>Success - Logged In. Use the returned cookie (jsessionid) on all subsequent requests</p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Unauthorized</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
     "error": {
         "code": 401,
         "message": "Bad credentials"
@@ -128,7 +128,19 @@
             "phone": "123 456 7890"
         }
     ]
-}</code></pre></small></p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users_post><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_post">post</span> <span class=parent></span>/users</h4></div><div class=modal-body><div class="alert alert-info"><p>Create a new user</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users_post_request data-toggle=tab>Request</a></li><li><a href=#_users_post_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users_post_request><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Schema</strong>:<pre><code>{
+}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Authentication error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/403 target=_blank>403</a></h2><p>Error - Permission error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 403,
+        "message": "Access is denied"
+    }
+}
+</code></pre></small></p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users_post><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_post">post</span> <span class=parent></span>/users</h4></div><div class=modal-body><div class="alert alert-info"><p>Create a new user</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users_post_request data-toggle=tab>Request</a></li><li><a href=#_users_post_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users_post_request><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Schema</strong>:<pre><code>{
     "type": "object",
     "$schema": "http://json-schema.org/draft-04/schema",
     "id": "http://jsonschema.net",
@@ -163,7 +175,19 @@
         "phone": "123 456 7890",
         "id": 6
     }
-}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/422 target=_blank>422</a></h2><p>Error - user validation errors</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Authentication error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/403 target=_blank>403</a></h2><p>Error - Permission error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 403,
+        "message": "Access is denied"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/422 target=_blank>422</a></h2><p>Error - user validation errors</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
   "errors": [
     {
       "entityName": "user",
@@ -179,7 +203,19 @@
         "phone": "123 456 7890",
         "id": 6
     }
-}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users__id__put><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_put">put</span> <span class=parent>/users</span>/{id}</h4></div><div class=modal-body><div class="alert alert-info"><p>Update a user by id</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users__id__put_request data-toggle=tab>Request</a></li><li><a href=#_users__id__put_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users__id__put_request><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Schema</strong>:<pre><code>{
+}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Authentication error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/403 target=_blank>403</a></h2><p>Error - Permission error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 403,
+        "message": "Access is denied"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users__id__put><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_put">put</span> <span class=parent>/users</span>/{id}</h4></div><div class=modal-body><div class="alert alert-info"><p>Update a user by id</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users__id__put_request data-toggle=tab>Request</a></li><li><a href=#_users__id__put_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users__id__put_request><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Schema</strong>:<pre><code>{
     "type": "object",
     "$schema": "http://json-schema.org/draft-04/schema",
     "id": "http://jsonschema.net",
@@ -217,7 +253,19 @@
         "phone": "123 456 7890",
         "id": 6
     }
-}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p><h2>HTTP status code <a href=http://httpstatus.es/422 target=_blank>422</a></h2><p>Error - user validation errors</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+}</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Authentication error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/403 target=_blank>403</a></h2><p>Error - Permission error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 403,
+        "message": "Access is denied"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p><h2>HTTP status code <a href=http://httpstatus.es/422 target=_blank>422</a></h2><p>Error - user validation errors</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
   "errors": [
     {
       "entityName": "user",
@@ -226,4 +274,16 @@
       "message": "may not be null"
     }
   ]
-}</code></pre></small></p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users__id__delete><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_delete">delete</span> <span class=parent>/users</span>/{id}</h4></div><div class=modal-body><div class="alert alert-info"><p>Delete a user by id</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users__id__delete_request data-toggle=tab>Request</a></li><li><a href=#_users__id__delete_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users__id__delete_request><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul></div><div class=tab-pane id=_users__id__delete_response><h2>HTTP status code <a href=http://httpstatus.es/204 target=_blank>204</a></h2><p>Success - user deleted</p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p></div></div></div></div></div></div></div></div></div></div></div><div class=col-md-3><div id=sidebar class="hidden-print affix" role=complementary><ul class="nav nav-pills nav-stacked"><li><a href=#_login>/login</a></li><li><a href=#_logout>/logout</a></li><li><a href=#_users>/users</a></li></ul></div></div></div></div></body></html>
+}</code></pre></small></p></div></div></div></div></div></div><div class="modal fade" tabindex=0 id=_users__id__delete><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal aria-hidden=true>&times;</button><h4 class=modal-title id=myModalLabel><span class="badge badge_delete">delete</span> <span class=parent>/users</span>/{id}</h4></div><div class=modal-body><div class="alert alert-info"><p>Delete a user by id</p></div><ul class="nav nav-tabs"><li class=active><a href=#_users__id__delete_request data-toggle=tab>Request</a></li><li><a href=#_users__id__delete_response data-toggle=tab>Response</a></li></ul><div class=tab-content><div class="tab-pane active" id=_users__id__delete_request><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Cookie</strong>: <em>(string)</em><p>A session tracking cookie that represents an authenticated session</p><p><small><strong>Example</strong>:<pre><code>JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B</code></pre></small></p></li></ul></div><div class=tab-pane id=_users__id__delete_response><h2>HTTP status code <a href=http://httpstatus.es/204 target=_blank>204</a></h2><p>Success - user deleted</p><h2>HTTP status code <a href=http://httpstatus.es/401 target=_blank>401</a></h2><p>Error - Authentication error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 401,
+        "message": "Full authentication is required to access this resource"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/403 target=_blank>403</a></h2><p>Error - Permission error</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><small><strong>Example</strong>:<pre><code>{
+    "error": {
+        "code": 403,
+        "message": "Access is denied"
+    }
+}
+</code></pre></small></p><h2>HTTP status code <a href=http://httpstatus.es/404 target=_blank>404</a></h2><p>Error - user not found</p></div></div></div></div></div></div></div></div></div></div></div><div class=col-md-3><div id=sidebar class="hidden-print affix" role=complementary><ul class="nav nav-pills nav-stacked"><li><a href=#_login>/login</a></li><li><a href=#_logout>/logout</a></li><li><a href=#_users>/users</a></li></ul></div></div></div></div></body></html>
