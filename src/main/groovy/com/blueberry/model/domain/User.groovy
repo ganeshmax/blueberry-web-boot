@@ -2,6 +2,7 @@ package com.blueberry.model.domain
 
 import com.blueberry.framework.domain.DbEntity
 import com.blueberry.framework.validation.ValidateEmail
+import com.fasterxml.jackson.annotation.JsonIgnore
 import groovy.transform.ToString
 
 import javax.persistence.*
@@ -27,6 +28,7 @@ public class User extends DbEntity {
     @Size(min = 8, max = 20)
     String phone;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
