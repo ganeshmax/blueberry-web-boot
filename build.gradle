@@ -6,8 +6,7 @@ buildscript {
 
     repositories {
         maven { url 'http://repo.spring.io/libs-release' }
-        maven { url 'http://repo.spring.io/milestone' }
-        maven { url 'http://repo.spring.io/snapshot' }
+
         mavenLocal()
         mavenCentral()
     }
@@ -30,6 +29,8 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { url 'http://repo.spring.io/libs-release' }
+    maven { url 'http://repo.spring.io/milestone' }
+    maven { url 'http://repo.spring.io/snapshot' }
 }
 
 dependencies {
