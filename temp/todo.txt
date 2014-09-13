@@ -3,6 +3,7 @@ TODO:
 Learn thymeleaf and configure it and set it up to work with user controller. Create user controller as well
 Setup liquibase or equivalent database migration tool and automate as much as possible
 Customize object mapper for Jackson
+Change the SC_UNAUTHORIZED etc and remove the SC prefix and change to HttpStatus class
 
 DONE:
 -----

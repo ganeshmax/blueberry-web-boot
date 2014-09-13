@@ -1,0 +1,155 @@
+#%RAML 0.8
+---
+title: Blueberry
+baseUri: http://blueberry-02.herokuapp.com
+mediaType: application/json
+version: v1
+
+schemas:
+  - user: !include user/user.schema
+
+resourceTypes:
+  - collection:
+      description: Collection of <<resourcePathName>>
+      get:
+        description: Retrieve a list of <<resourcePathName>>
+        headers:
+          Cookie:
+            description: A session tracking cookie that represents an authenticated session
+            example: JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B
+        responses:
+          200:
+            description: Success - <<resourcePathName>> retrieved
+            body:
+              application/json:
+                example: <<exampleCollection>>
+      post:
+        description: Create a new <<resourcePathName|!singularize>>
+        headers:
+          Cookie:
+            description: A session tracking cookie that represents an authenticated session
+            example: JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: <<exampleNewItem>>
+        responses:
+          201:
+            description: Success - <<resourcePathName|!singularize>> created
+            body:
+              application/json:
+                example: <<exampleItem>>
+          422:
+            description: Error - <<resourcePathName|!singularize>> validation errors
+            body:
+              application/json:
+                example: <<exampleItemError>>
+
+  - collection-item:
+      description: <<resourcePathName|!singularize>> Entity
+      get:
+        description: Retrieve a <<resourcePathName|!singularize>> by id
+        headers:
+          Cookie:
+            description: A session tracking cookie that represents an authenticated session
+            example: JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B
+        responses:
+          200:
+            description: Success - <<resourcePathName|!singularize>> retrieved
+            body:
+              application/json:
+                example: <<exampleItem>>
+          404:
+            description: Error - <<resourcePathName|!singularize>> not found
+
+      put:
+        description: Update a <<resourcePathName|!singularize>> by id
+        headers:
+          Cookie:
+            description: A session tracking cookie that represents an authenticated session
+            example: JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: <<exampleItem>>
+        responses:
+          200:
+            description: Success - <<resourcePathName|!singularize>> updated
+            body:
+              application/json:
+                example: <<exampleItem>>
+          404:
+            description: Error - <<resourcePathName|!singularize>> not found
+          422:
+            description: Error - <<resourcePathName|!singularize>> validation errors
+            body:
+              application/json:
+                example: <<exampleItemError>>
+      delete:
+        description: Delete a <<resourcePathName|!singularize>> by id
+        headers:
+          Cookie:
+            description: A session tracking cookie that represents an authenticated session
+            example: JSESSIONID=64BDEB6C6095F84785C5BBF0BB35668B
+        responses:
+          204:
+            description: Success - <<resourcePathName|!singularize>> deleted
+          404:
+            description: Error - <<resourcePathName|!singularize>> not found
+
+  - readOnlyCollection:
+      description: Collection of <<resourcePathName>>
+      get:
+        description: Retrieve a list of <<resourcePathName>>.
+        responses:
+          200:
+            body:
+              application/json:
+                example: <<exampleCollection>>
+
+/login:
+  post:
+    description: Login to the application
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          username:
+            description: The email ID for the user
+            example: user1@email.com
+            required: true
+            type: string
+          password:
+            description: The password for the user
+            example: password
+            required: true
+            type: string
+    responses:
+      200:
+        description: Success - Logged In. Use the returned cookie (jsessionid) on all subsequent requests
+      401:
+        description: Error - Unauthorized
+        body:
+          application/json:
+            example: !include login/login-error.sample
+
+/logout:
+  post:
+    description: Logout from the application
+    responses:
+      200:
+        description: Success - Logged out
+
+/users:
+  type:
+    collection:
+      exampleCollection:    !include user/users.sample
+      exampleNewItem:       !include user/user-new.sample
+      exampleItem:          !include user/user.sample
+      exampleItemError:     !include user/user-error.sample
+
+  /{id}:
+    type:
+      collection-item:
+        exampleItem:        !include user/user.sample
+        exampleItemError:   !include user/user-error.sample
+

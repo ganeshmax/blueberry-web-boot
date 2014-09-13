@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "entityName": "user",
+      "fieldName": "phone",
+      "code": "NotNull",
+      "message": "may not be null"
+    }
+  ]
+}
